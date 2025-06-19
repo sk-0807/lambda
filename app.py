@@ -6,6 +6,7 @@ logger.setLevel(logging.INFO)
 
 def lambda_handler(event, context):
     logger.info("Hello from Lambda")
+    logger.info("Hi Team")
     return {
         'statusCode': 200,
         'body': json.dumps('Hello from GitHub Actions Lambda!')
