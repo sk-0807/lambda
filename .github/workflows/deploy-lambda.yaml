@@ -13,17 +13,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Package Lambda code
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Zip Lambda code
         run: |
-          mkdir build
+          mkdir -p build
           cp app.py build/
           cd build && zip -r ../lambda.zip .
 
-      - name: Deploy to Lambda
-        uses: aws/aws-cli + zip + aws lambda update-function-code
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          region: us-east-1
-          function_name: lambda_check
-          zip_file: lambda.zip
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Deploy to Lambda using AWS CLI
+        run: |
+          aws lambda update-function-code \
+            --function-name lambda_check \
+            --zip-file fileb://lambda.zip
