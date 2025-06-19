@@ -18,11 +18,9 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Zip Lambda code
+      - name: Zip entire project (excluding CI folders)
         run: |
-          mkdir -p build
-          cp app.py build/
-          cd build && zip -r ../lambda.zip .
+          zip -r lambda.zip . -x ".git/*" ".github/*" "lambda.zip"
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
