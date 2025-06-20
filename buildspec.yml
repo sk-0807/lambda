@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+
+  build:
+    commands:
+      - echo "Zipping entire project directory..."
+      - zip -r lambda.zip . -x ".git/*" ".github/*" "lambda.zip"
+      - echo "Deploying zipped package to Lambda..."
+      - aws lambda update-function-code \
+          --function-name lambda_check \
+          --zip-file fileb://lambda.zip
+
+artifacts:
+  files:
+    - lambda.zip
