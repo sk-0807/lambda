@@ -14,7 +14,3 @@ phases:
         aws lambda update-function-code \
           --function-name lambda_check \
           --zip-file fileb://lambda.zip
-
-artifacts:
-  files:
-    - lambda.zip
